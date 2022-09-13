@@ -22,7 +22,7 @@ jobs:
 
       - name: Docker image Build and push
         run: |
-          cd benchmark/docker
+          cd benchmark
           docker build . -f docker/Dockerfile.build -t ${{github.repository}}:${{github.ref_name}}
           docker push ${{github.repository}}:${{github.ref_name}}
 
