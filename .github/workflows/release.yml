@@ -23,7 +23,10 @@ jobs:
       - name: Docker image Build and push
         run: |
           cd benchmark
-          docker build . -f docker/Dockerfile.build -t ${{github.repository}}:${{github.ref_name}}
-          docker push ${{github.repository}}:${{github.ref_name}}
+          docker build . -f docker/Dockerfile.build -t ${{github.repository_owner}}/openmessaging-benchmark:${{github.ref_name}}
+          docker push ${{github.repository}}/openmessaging-benchmark:${{github.ref_name}}
+          docker tag ${{github.repository}}/openmessaging-benchmark:${{github.ref_name}} ${{github.repository}}/openmessaging-benchmark:latest
+          docker push ${{github.repository}}/openmessaging-benchmark:latest
+
 
 
