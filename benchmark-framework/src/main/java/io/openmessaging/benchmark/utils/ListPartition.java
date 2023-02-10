@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,18 +13,19 @@
  */
 package io.openmessaging.benchmark.utils;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListPartition {
 
     /**
-     * partition a list to specified size
+     * partition a list to specified size.
      *
      * @param originList
      * @param size
      * @param <T>
-     * @return
+     * @return the partitioned list
      */
     public static <T> List<List<T>> partitionList(List<T> originList, int size) {
 
@@ -55,5 +56,4 @@ public class ListPartition {
         }
         return resultList;
     }
-
 }

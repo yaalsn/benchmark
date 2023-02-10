@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,14 +19,14 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
+import io.openmessaging.benchmark.driver.kop.config.ClientType;
+import io.openmessaging.benchmark.driver.kop.config.Config;
+import io.openmessaging.benchmark.driver.kop.config.PulsarConfig;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
-import io.openmessaging.benchmark.driver.kop.config.ClientType;
-import io.openmessaging.benchmark.driver.kop.config.Config;
-import io.openmessaging.benchmark.driver.kop.config.PulsarConfig;
 import org.testng.annotations.Test;
 
 public class KopBenchmarkDriverTest {
@@ -49,7 +49,6 @@ public class KopBenchmarkDriverTest {
         assertTrue(pulsarConfig.blockIfQueueFull);
         assertEquals(pulsarConfig.pendingQueueSize, 1000);
         assertEquals(pulsarConfig.maxPendingMessagesAcrossPartitions, 50000);
-        assertEquals(pulsarConfig.batchingPartitionSwitchFrequencyByPublishDelay, 10);
         assertEquals(pulsarConfig.maxTotalReceiverQueueSizeAcrossPartitions, 50000);
         assertEquals(pulsarConfig.receiverQueueSize, 1000);
 
@@ -74,7 +73,6 @@ public class KopBenchmarkDriverTest {
         assertFalse(pulsarConfig.blockIfQueueFull);
         assertEquals(pulsarConfig.pendingQueueSize, 10000);
         assertEquals(pulsarConfig.maxPendingMessagesAcrossPartitions, 500000);
-        assertEquals(pulsarConfig.batchingPartitionSwitchFrequencyByPublishDelay, 100);
         assertEquals(pulsarConfig.maxTotalReceiverQueueSizeAcrossPartitions, 500000);
         assertEquals(pulsarConfig.receiverQueueSize, 10000);
 

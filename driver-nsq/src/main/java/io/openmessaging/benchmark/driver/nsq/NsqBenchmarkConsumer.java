@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,15 +13,19 @@
  */
 package io.openmessaging.benchmark.driver.nsq;
 
+
 import com.github.brainlag.nsq.NSQConsumer;
 import io.openmessaging.benchmark.driver.BenchmarkConsumer;
 
 public class NsqBenchmarkConsumer implements BenchmarkConsumer {
     private NSQConsumer nsqConsumer;
+
     public NsqBenchmarkConsumer(NSQConsumer nsqConsumer) {
         this.nsqConsumer = nsqConsumer;
     }
-    @Override public void close() throws Exception {
+
+    @Override
+    public void close() throws Exception {
         this.nsqConsumer.shutdown();
     }
 }

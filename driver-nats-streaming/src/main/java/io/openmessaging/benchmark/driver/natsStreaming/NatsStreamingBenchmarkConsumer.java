@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,25 +13,22 @@
  */
 package io.openmessaging.benchmark.driver.natsStreaming;
 
+
 import io.nats.streaming.StreamingConnection;
-import io.nats.streaming.Subscription;
 import io.openmessaging.benchmark.driver.BenchmarkConsumer;
 
 public class NatsStreamingBenchmarkConsumer implements BenchmarkConsumer {
     private StreamingConnection streamingConnection;
-    private Subscription sub;
-    private String topic;
     private boolean unsubscribe;
-    public NatsStreamingBenchmarkConsumer(StreamingConnection streamingConnection, Subscription sub, String topic) {
-        this.sub = sub;
-        this.topic = topic;
+
+    public NatsStreamingBenchmarkConsumer(StreamingConnection streamingConnection) {
         this.unsubscribe = false;
         this.streamingConnection = streamingConnection;
     }
 
-    @Override public void close() throws Exception {
+    @Override
+    public void close() throws Exception {
         if (!unsubscribe) {
-//            sub.unsubscribe();
             unsubscribe = true;
             streamingConnection.close();
         }

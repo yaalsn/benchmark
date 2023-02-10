@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,6 +13,7 @@
  */
 package io.openmessaging.benchmark.utils;
 
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.FieldPosition;
@@ -22,8 +23,11 @@ public class PaddingDecimalFormat extends DecimalFormat {
     private int minimumLength;
 
     /**
-     * Creates a PaddingDecimalFormat using the given pattern and minimum minimumLength and the symbols for the default
-     * locale.
+     * Creates a PaddingDecimalFormat using the given pattern and minimum minimumLength and the
+     * symbols for the default locale.
+     *
+     * @param pattern
+     * @param minLength
      */
     public PaddingDecimalFormat(String pattern, int minLength) {
         super(pattern);
@@ -32,6 +36,10 @@ public class PaddingDecimalFormat extends DecimalFormat {
 
     /**
      * Creates a PaddingDecimalFormat using the given pattern, symbols and minimum minimumLength.
+     *
+     * @param pattern
+     * @param symbols
+     * @param minLength
      */
     public PaddingDecimalFormat(String pattern, DecimalFormatSymbols symbols, int minLength) {
         super(pattern, symbols);

@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,23 +13,25 @@
  */
 package io.openmessaging.benchmark.driver.artemis;
 
+
+import io.openmessaging.benchmark.driver.BenchmarkProducer;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-
 import org.apache.activemq.artemis.api.core.ActiveMQException;
+import org.apache.activemq.artemis.api.core.Message;
 import org.apache.activemq.artemis.api.core.client.ClientMessage;
 import org.apache.activemq.artemis.api.core.client.ClientProducer;
 import org.apache.activemq.artemis.api.core.client.ClientSession;
 import org.apache.activemq.artemis.api.core.client.ClientSessionFactory;
-
-import io.openmessaging.benchmark.driver.BenchmarkProducer;
+import org.apache.activemq.artemis.api.core.client.SendAcknowledgementHandler;
 
 public class ArtemisBenchmarkProducer implements BenchmarkProducer {
 
     private final ClientSession session;
     private final ClientProducer producer;
 
-    public ArtemisBenchmarkProducer(String address, ClientSessionFactory sessionFactory) throws ActiveMQException {
+    public ArtemisBenchmarkProducer(String address, ClientSessionFactory sessionFactory)
+            throws ActiveMQException {
         session = sessionFactory.createSession();
         producer = session.createProducer(address);
         session.start();
@@ -43,20 +45,29 @@ public class ArtemisBenchmarkProducer implements BenchmarkProducer {
 
     @Override
     public CompletableFuture<Void> sendAsync(Optional<String> key, byte[] payload) {
-        ClientMessage msg = session.createMessage(true /* durable */ );
+        ClientMessage msg = session.createMessage(true /* durable */);
         msg.setTimestamp(System.currentTimeMillis());
         msg.getBodyBuffer().writeBytes(payload);
 
         CompletableFuture<Void> future = new CompletableFuture<>();
         try {
-            producer.send(msg, message -> {
-                future.complete(null);
-            });
+            producer.send(
+                    msg,
+                    new SendAcknowledgementHandler() {
+                        @Override
+                        public void sendAcknowledged(Message message) {
+                            future.complete(null);
+                        }
+
+                        @Override
+                        public void sendFailed(Message message, Exception e) {
+                            future.completeExceptionally(e);
+                        }
+                    });
         } catch (ActiveMQException e) {
             future.completeExceptionally(e);
         }
 
         return future;
     }
-
 }

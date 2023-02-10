@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,9 +13,12 @@
  */
 package io.openmessaging.benchmark.driver.kop.config;
 
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum ClientType {
-    @JsonProperty("kafka") KAFKA,
-    @JsonProperty("pulsar") PULSAR
+    @JsonProperty("kafka")
+    KAFKA,
+    @JsonProperty("pulsar")
+    PULSAR
 }

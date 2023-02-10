@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,15 +13,23 @@
  */
 package io.openmessaging.benchmark.worker.commands;
 
-import io.openmessaging.benchmark.utils.distributor.KeyDistributorType;
 
+import io.openmessaging.benchmark.utils.distributor.KeyDistributorType;
 import java.util.List;
 
 public class ProducerWorkAssignment {
-    
+
     public List<byte[]> payloadData;
-    
+
     public double publishRate;
 
     public KeyDistributorType keyDistributorType;
+
+    public ProducerWorkAssignment withPublishRate(double publishRate) {
+        ProducerWorkAssignment copy = new ProducerWorkAssignment();
+        copy.keyDistributorType = this.keyDistributorType;
+        copy.payloadData = this.payloadData;
+        copy.publishRate = publishRate;
+        return copy;
+    }
 }

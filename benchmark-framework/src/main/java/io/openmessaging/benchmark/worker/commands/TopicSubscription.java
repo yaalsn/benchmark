@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,8 +17,7 @@ public class TopicSubscription {
     public String topic;
     public String subscription;
 
-    public TopicSubscription() {
-    }
+    public TopicSubscription() {}
 
     public TopicSubscription(String topic, String subscription) {
         this.topic = topic;
@@ -27,9 +26,13 @@ public class TopicSubscription {
 
     @Override
     public String toString() {
-        return "TopicSubscription{" +
-            "topic='" + topic + '\'' +
-            ", subscription='" + subscription + '\'' +
-            '}';
+        return "TopicSubscription{"
+                + "topic='"
+                + topic
+                + '\''
+                + ", subscription='"
+                + subscription
+                + '\''
+                + '}';
     }
 }

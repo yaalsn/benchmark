@@ -12,7 +12,13 @@
 # limitations under the License.
 #
 
-org.slf4j.simpleLogger.showDateTime=true
-org.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss.SSS
-org.slf4j.simpleLogger.log.org.apache.kafka=WARN
-org.slf4j.simpleLogger.log.io.openmessaging.benchmark.driver.kafka=DEBUG
+- name: Benchmarking worker restart
+  hosts: client
+  connection: ssh
+  become: true
+  tasks:
+    - name: Benchmark - Start service
+      systemd:
+        state: restarted
+        daemon_reload: yes
+        name: "benchmark-worker"

@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,6 +12,7 @@
  * limitations under the License.
  */
 package io.openmessaging.benchmark.driver.nsq;
+
 
 import com.github.brainlag.nsq.NSQProducer;
 import com.github.brainlag.nsq.exceptions.NSQException;
@@ -36,26 +37,27 @@ public class NsqBenchmarkProducer implements BenchmarkProducer {
         this.topic = topic;
     }
 
-    @Override public CompletableFuture<Void> sendAsync(Optional<String> key, byte[] payload) {
+    @Override
+    public CompletableFuture<Void> sendAsync(Optional<String> key, byte[] payload) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         try {
             semaphore.acquire();
 
-            executor.submit(() -> {
-                try {
-                    nsqProducer.produce(topic, payload);
-                } catch (NSQException e) {
-                    log.error("send exception", e);
-                    future.exceptionally(null);
-                } catch (TimeoutException e) {
-                    log.error("send exception", e);
-                    future.exceptionally(null);
-                } finally {
-                    semaphore.release();
-                }
-                future.complete(null);
-
-            });
+            executor.submit(
+                    () -> {
+                        try {
+                            nsqProducer.produce(topic, payload);
+                        } catch (NSQException e) {
+                            log.error("send exception", e);
+                            future.exceptionally(null);
+                        } catch (TimeoutException e) {
+                            log.error("send exception", e);
+                            future.exceptionally(null);
+                        } finally {
+                            semaphore.release();
+                        }
+                        future.complete(null);
+                    });
         } catch (InterruptedException e) {
             log.error("semaphore exception", e);
             future.exceptionally(null);
@@ -64,8 +66,10 @@ public class NsqBenchmarkProducer implements BenchmarkProducer {
         return future;
     }
 
-    @Override public void close() throws Exception {
+    @Override
+    public void close() throws Exception {
         this.nsqProducer.shutdown();
     }
+
     private static final Logger log = LoggerFactory.getLogger(NsqBenchmarkProducer.class);
 }

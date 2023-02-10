@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,9 +13,11 @@
  */
 package io.openmessaging.benchmark.utils;
 
-import java.util.concurrent.TimeUnit;
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 import java.util.concurrent.locks.LockSupport;
+import java.util.function.Supplier;
 
 /**
  * Provides a next operation time for rate limited operation streams.<br>
@@ -27,13 +29,14 @@ public final class UniformRateLimiter {
             AtomicLongFieldUpdater.newUpdater(UniformRateLimiter.class, "virtualTime");
     private static final AtomicLongFieldUpdater<UniformRateLimiter> START_UPDATER =
             AtomicLongFieldUpdater.newUpdater(UniformRateLimiter.class, "start");
-    private static final double ONE_SEC_IN_NS = TimeUnit.SECONDS.toNanos(1);
+    private static final double ONE_SEC_IN_NS = SECONDS.toNanos(1);
     private volatile long start = Long.MIN_VALUE;
     private volatile long virtualTime;
     private final double opsPerSec;
     private final long intervalNs;
+    private final Supplier<Long> nanoClock;
 
-    public UniformRateLimiter(final double opsPerSec) {
+    UniformRateLimiter(final double opsPerSec, Supplier<Long> nanoClock) {
         if (Double.isNaN(opsPerSec) || Double.isInfinite(opsPerSec)) {
             throw new IllegalArgumentException("opsPerSec cannot be Nan or Infinite");
         }
@@ -42,6 +45,11 @@ public final class UniformRateLimiter {
         }
         this.opsPerSec = opsPerSec;
         intervalNs = Math.round(ONE_SEC_IN_NS / opsPerSec);
+        this.nanoClock = nanoClock;
+    }
+
+    public UniformRateLimiter(final double opsPerSec) {
+        this(opsPerSec, System::nanoTime);
     }
 
     public double getOpsPerSec() {
@@ -56,7 +64,7 @@ public final class UniformRateLimiter {
         final long currOpIndex = V_TIME_UPDATER.getAndIncrement(this);
         long start = this.start;
         if (start == Long.MIN_VALUE) {
-            start = System.nanoTime();
+            start = nanoClock.get();
             if (!START_UPDATER.compareAndSet(this, Long.MIN_VALUE, start)) {
                 start = this.start;
                 assert start != Long.MIN_VALUE;

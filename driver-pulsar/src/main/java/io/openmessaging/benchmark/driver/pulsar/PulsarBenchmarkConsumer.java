@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,6 +13,8 @@
  */
 package io.openmessaging.benchmark.driver.pulsar;
 
+import static java.util.Collections.unmodifiableList;
+
 import io.openmessaging.benchmark.driver.BenchmarkConsumer;
 import java.nio.ByteBuffer;
 import java.util.List;
@@ -23,7 +25,7 @@ public class PulsarBenchmarkConsumer implements BenchmarkConsumer {
     private final List<Consumer<ByteBuffer>> consumer;
 
     public PulsarBenchmarkConsumer(List<Consumer<ByteBuffer>> consumer) {
-        this.consumer = consumer;
+        this.consumer = unmodifiableList(consumer);
     }
 
     @Override

@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,11 +13,11 @@
  */
 package io.openmessaging.benchmark.utils.payload;
 
+import static java.nio.file.Files.readAllBytes;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-
-import static java.nio.file.Files.readAllBytes;
 
 public class FilePayloadReader implements PayloadReader {
 
@@ -41,8 +41,10 @@ public class FilePayloadReader implements PayloadReader {
 
     private void checkPayloadLength(byte[] payload) {
         if (expectedLength != payload.length) {
-            throw new PayloadException(MessageFormat.format("Payload length mismatch. Actual is: {0}, but expected: {1} ",
-                    payload.length, expectedLength));
+            throw new PayloadException(
+                    MessageFormat.format(
+                            "Payload length mismatch. Actual is: {0}, but expected: {1} ",
+                            payload.length, expectedLength));
         }
     }
 }

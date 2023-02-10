@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,8 +14,9 @@
 package io.openmessaging.benchmark.driver.pravega.config;
 
 public class PravegaConfig {
-    // By default, Stream auto-scaling is not configured. So the scaling thresholds are initialized with -1.
-    public static int DEFAULT_STREAM_AUTOSCALING_VALUE = -1;
+    // By default, Stream auto-scaling is not configured. So the scaling thresholds are initialized
+    // with -1.
+    public static final int DEFAULT_STREAM_AUTOSCALING_VALUE = -1;
 
     public PravegaClientConfig client;
     public PravegaWriterConfig writer;

@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,23 +13,28 @@
  */
 package io.openmessaging.benchmark.worker.commands;
 
-import java.util.concurrent.TimeUnit;
+import static java.util.concurrent.TimeUnit.HOURS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 import org.HdrHistogram.Histogram;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class CumulativeLatencies {
 
-    @JsonIgnore
-    public Histogram publishLatency = new Histogram(TimeUnit.SECONDS.toMicros(60), 5);
-    public byte[] publishLatencyBytes;
+    public Histogram publishLatency = new Histogram(SECONDS.toMicros(60), 5);
+    public Histogram publishDelayLatency = new Histogram(SECONDS.toMicros(60), 5);
+    public Histogram endToEndLatency = new Histogram(HOURS.toMicros(12), 5);
 
-    @JsonIgnore
-    public Histogram publishDelayLatency = new Histogram(TimeUnit.SECONDS.toMicros(60), 5);
-    public byte[] publishDelayLatencyBytes;
+    public CumulativeLatencies plus(CumulativeLatencies toAdd) {
+        CumulativeLatencies result = new CumulativeLatencies();
 
-    @JsonIgnore
-    public Histogram endToEndLatency = new Histogram(TimeUnit.HOURS.toMicros(12), 5);
-    public byte[] endToEndLatencyBytes;
+        result.publishLatency.add(this.publishLatency);
+        result.publishDelayLatency.add(this.publishDelayLatency);
+        result.endToEndLatency.add(this.endToEndLatency);
+
+        result.publishLatency.add(toAdd.publishLatency);
+        result.publishDelayLatency.add(toAdd.publishDelayLatency);
+        result.endToEndLatency.add(toAdd.endToEndLatency);
+
+        return result;
+    }
 }

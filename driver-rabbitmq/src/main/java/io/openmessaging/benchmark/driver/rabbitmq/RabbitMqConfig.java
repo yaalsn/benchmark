@@ -1,4 +1,4 @@
-/**
+/*
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,12 +13,43 @@
  */
 package io.openmessaging.benchmark.driver.rabbitmq;
 
+import static io.openmessaging.benchmark.driver.rabbitmq.RabbitMqConfig.QueueType.CLASSIC;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class RabbitMqConfig {
 
     public List<String> amqpUris = new ArrayList<>();
-
     public boolean messagePersistence = false;
+    public QueueType queueType = CLASSIC;
+    public long producerCreationDelay = 100;
+    public int producerCreationBatchSize = 5;
+    public long consumerCreationDelay = 100;
+    public int consumerCreationBatchSize = 5;
+
+    public enum QueueType {
+        CLASSIC {
+            @Override
+            Map<String, Object> queueOptions() {
+                return Collections.emptyMap();
+            }
+        },
+        QUORUM {
+            @Override
+            Map<String, Object> queueOptions() {
+                return Collections.singletonMap("x-queue-type", "quorum");
+            }
+        },
+        STREAM {
+            @Override
+            Map<String, Object> queueOptions() {
+                return Collections.singletonMap("x-queue-type", "stream");
+            }
+        };
+
+        abstract Map<String, Object> queueOptions();
+    }
 }
